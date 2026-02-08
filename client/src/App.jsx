@@ -290,62 +290,66 @@ const App = () => {
         {/* 🔹 About Section */}
         <section
           id="about"
-          className="flex flex-col items-center justify-center h-auto md:h-screen px-6 sm:px-12 md:px-24 py-10 sm:py-12 bg-transparent
- text-white overflow-hidden"
+          className="flex flex-col items-center justify-center
+  px-6 sm:px-12 md:px-24
+  py-20 sm:py-24
+  bg-transparent text-white overflow-visible"
         >
-          <div className="w-full flex flex-col items-center mb-8 sm:mb-10 text-center">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2 tracking-tight">
+          {/* Title */}
+          <div className="w-full flex flex-col items-center mb-12 text-center">
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 tracking-tight">
               <span className="text-blue-400">About</span> Me
             </h1>
-            <div className="h-[3px] w-16 sm:w-20 bg-blue-500 rounded-full"></div>
+            <div className="h-[3px] w-20 bg-blue-500 rounded-full"></div>
           </div>
 
-          <div className="flex flex-col-reverse md:flex-row items-center justify-center gap-10 md:gap-16 w-full max-w-6xl">
+          <div className="flex flex-col-reverse md:flex-row items-center justify-center gap-12 md:gap-16 w-full max-w-6xl">
+            {/* Image */}
             <motion.div
-              className="flex justify-center md:justify-end w-full md:w-[38%] mb-1 md:mb-0"
-              initial={{ opacity: 0, x: -80, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+              className="flex justify-center md:justify-end w-full md:w-[38%]"
+              initial={{ opacity: 0, x: -60, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true }}
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(59,130,246,0.2)] hover:shadow-[0_0_60px_rgba(59,130,246,0.3)] transition-all duration-700">
+              <div className="relative rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(59,130,246,0.25)]">
                 <img
                   src="/my.jpg"
                   alt="Rushi"
-                  className="w-[300px] sm:w-[300px] md:w-[320px] rounded-2xl object-cover"
+                  className="w-[280px] sm:w-[300px] md:w-[320px] rounded-2xl object-cover"
                 />
               </div>
             </motion.div>
 
+            {/* Content Card */}
             <motion.div
-              className="w-full md:w-[55%] flex justify-center md:justify-start"
-              initial={{ opacity: 0, x: 80, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+              className="w-full md:w-[55%]"
+              initial={{ opacity: 0, x: 60, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true }}
             >
-              <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 w-full max-w-xl text-center md:text-left transition-all duration-700 hover:shadow-[0_0_50px_rgba(59,130,246,0.25)]">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+              <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-8 sm:p-10 transition-all duration-700">
+                <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">
                   <span className="text-blue-400">Rushikesh Arote</span>
                 </h2>
 
-                <h3 className="text-base sm:text-lg font-semibold text-blue-300 mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-blue-300 mb-5">
                   MERN Stack Developer | Full Stack Developer
                 </h3>
 
                 <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6">
-                  MERN Stack / Full Stack Developer with hands-on experience of
+                  MERN Stack / Full Stack Developer with hands-on experience
                   building scalable, secure, and high-performance web
-                  applications. Strong in responsive UI development, RESTful API
-                  design, authentication, and backend optimization using modern
+                  applications.
+                  <br />
+                  <br />
+                  Strong in responsive UI development, RESTful API design,
+                  authentication, and backend optimization using modern
                   JavaScript technologies.
-                  <br />
-                  <br />
-                  Focused on clean code, performance, and delivering real-world,
-                  user-centric products across the full development lifecycle.
                 </p>
 
-                <div className="space-y-2 text-gray-300 mb-5">
+                <div className="space-y-2 text-gray-300 mb-6">
                   <p>
                     <span className="font-semibold text-white">📧 Email:</span>{" "}
                     <a
@@ -363,16 +367,16 @@ const App = () => {
                   </p>
                 </div>
 
-                <div className="mt-6">
-                  <a
-                    href="/Rushi_Resume.pdf"
-                    download
-                    className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 sm:px-8 py-2.5 rounded-lg shadow-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all duration-300 text-sm sm:text-base"
-                  >
-                    Download Resume
-                    <i className="fas fa-arrow-right ml-2 text-xs sm:text-sm"></i>
-                  </a>
-                </div>
+                <a
+                  href="/Rushikesh_Arote_CV_.pdf"
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2.5 rounded-lg shadow-lg transition-all"
+                >
+                  Download Resume
+                  <i className="fas fa-arrow-right ml-2 text-sm"></i>
+                </a>
               </div>
             </motion.div>
           </div>
