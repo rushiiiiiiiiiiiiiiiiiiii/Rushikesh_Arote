@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Lottie from "lottie-react";
 import { Volume2, VolumeX, ArrowUp } from "lucide-react";
 import heroAnimation from "./assets/hero-image.json";
+import contactAnimation from "./assets/contact-animation.json";
 import bgMusic from "./assets/mixkit-beautiful-dream-493.mp3";
 import clickSound from "./assets/preview.mp3";
 import { useClickSound } from "./hooks/useClickSound";
@@ -13,25 +14,28 @@ const App = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const playClick = useClickSound();
-  const [activeSkill, setActiveSkill] = useState(null);
-const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const [activeSkill, setActiveSkill] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [activeProjectType, setActiveProjectType] = useState("company");
   const audioRef = useRef(null);
   const clickRef = useRef(null);
-const handleSmoothNav = (targetId) => {
-  playNavClick();
-  setIsTransitioning(true);
+  const [selectedProject, setSelectedProject] = useState(null);
 
-  // Wait for the animation to play, then scroll
-  setTimeout(() => {
-    setIsTransitioning(false);
+  const handleSmoothNav = (targetId) => {
+    playNavClick();
+    setIsTransitioning(true);
 
-    const target = document.querySelector(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
-  }, 800); // match the motion transition duration
-};
+    // Wait for the animation to play, then scroll
+    setTimeout(() => {
+      setIsTransitioning(false);
+
+      const target = document.querySelector(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 800); // match the motion transition duration
+  };
 
   useEffect(() => {
     audioRef.current = new Audio(bgMusic);
@@ -110,79 +114,88 @@ const handleSmoothNav = (targetId) => {
       {/* 🌍 Content Layer */}
       <div className="relative z-[1]">
         {/* 🌊 Page Transition Overlay */}
-<motion.div
-  initial={{ x: "100%" }}
-  animate={isTransitioning ? { x: "0%" } : { x: "100%" }}
-  transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-  className="fixed inset-0 z-[999] bg-gradient-to-r from-blue-600 via-purple-600 to-blue-500 pointer-events-none"
-  style={{
-    transformOrigin: "left center",
-  }}
-/>
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={isTransitioning ? { x: "0%" } : { x: "100%" }}
+          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[999] bg-gradient-to-r from-blue-600 via-purple-600 to-blue-500 pointer-events-none"
+          style={{
+            transformOrigin: "left center",
+          }}
+        />
 
-{/* 🔹 Navbar */}
-<header className="absolute top-0 left-0 w-full flex items-center justify-between px-6 sm:px-10 py-5 z-[100]">
-  <h1
-    className="text-2xl sm:text-3xl font-bold tracking-wide cursor-pointer text-blue-400 hover:text-blue-300 transition select-none"
-    onClick={playNavClick}
-  >
-    Rushi<span className="text-white">.dev</span>
-  </h1>
+        {/* 🔹 Navbar */}
+        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-6 sm:px-10 py-5 z-[100]">
+          <h1
+            className="text-2xl sm:text-3xl font-bold tracking-wide cursor-pointer text-blue-400 hover:text-blue-300 transition select-none"
+            onClick={playNavClick}
+          >
+            Rushi<span className="text-white">.dev</span>
+          </h1>
 
-  <div className="flex items-center space-x-6 sm:space-x-8">
-    {/* 🎵 Sound */}
-    <button
-      onClick={toggleMusic}
-      aria-label="Toggle background music"
-      className={`relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-lg border border-gray-600/40 bg-gray-800/40 backdrop-blur-md transition-all duration-500 ease-in-out cursor-pointer ${
-        isPlaying ? "bg-white text-gray-900 border-white/80 scale-100" : ""
-      }`}
-    >
-      {isPlaying ? (
-        <Volume2 className="text-gray-900 animate-pulse" size={22} />
-      ) : (
-        <VolumeX className="text-gray-300" size={22} />
-      )}
-    </button>
+          <div className="flex items-center space-x-6 sm:space-x-8">
+            {/* 🎵 Sound */}
+            <button
+              onClick={toggleMusic}
+              aria-label="Toggle background music"
+              className={`relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-lg border border-gray-600/40 bg-gray-800/40 backdrop-blur-md transition-all duration-500 ease-in-out cursor-pointer ${
+                isPlaying
+                  ? "bg-white text-gray-900 border-white/80 scale-100"
+                  : ""
+              }`}
+            >
+              {isPlaying ? (
+                <Volume2 className="text-gray-900 animate-pulse" size={22} />
+              ) : (
+                <VolumeX className="text-gray-300" size={22} />
+              )}
+            </button>
 
-    {/* 🍔 Menu */}
-    <button
-      aria-label="Toggle menu"
-      onClick={() => {
-        playNavClick();
-        setMenuOpen(!menuOpen);
-      }}
-      className={`relative flex flex-col justify-center items-center w-11 h-11 sm:w-12 sm:h-12 rounded-lg cursor-pointer border border-gray-600/40 bg-gray-800/40 backdrop-blur-md transition-all duration-500 ease-in-out ${
-        menuOpen ? "bg-white border-white/80 scale-100" : ""
-      }`}
-    >
-      <span
-        className={`w-5 h-[2px] mb-1 transition-all duration-300 ${
-          menuOpen ? "translate-y-[6px] rotate-45 bg-gray-900" : "bg-white"
-        }`}
-      ></span>
-      <span
-        className={`w-5 h-[2px] mb-1 transition-all duration-300 ${
-          menuOpen ? "opacity-0" : "bg-white"
-        }`}
-      ></span>
-      <span
-        className={`w-5 h-[2px] transition-all duration-300 ${
-          menuOpen ? "-translate-y-[6px] -rotate-45 bg-gray-900" : "bg-white"
-        }`}
-      ></span>
-    </button>
-  </div>
-</header>
-{/* 🔹 Animated Right-Side Navigation Menu */}
-<motion.nav
-  // use numeric x for better COMPOSITE-only animation (GPU)
-  initial={{ x: 100, opacity: 0 }}
-  animate={menuOpen ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
-  transition={{ duration: 0.35, ease: "easeOut" }}
-  // force a new composite layer and hint the browser to optimize
-  style={{ transform: "translateZ(0)", willChange: "transform, opacity" }}
-  className={`fixed top-0 right-0 h-full w-full md:w-[380px]
+            {/* 🍔 Menu */}
+            <button
+              aria-label="Toggle menu"
+              onClick={() => {
+                playNavClick();
+                setMenuOpen(!menuOpen);
+              }}
+              className={`relative flex flex-col justify-center items-center w-11 h-11 sm:w-12 sm:h-12 rounded-lg cursor-pointer border border-gray-600/40 bg-gray-800/40 backdrop-blur-md transition-all duration-500 ease-in-out ${
+                menuOpen ? "bg-white border-white/80 scale-100" : ""
+              }`}
+            >
+              <span
+                className={`w-5 h-[2px] mb-1 transition-all duration-300 ${
+                  menuOpen
+                    ? "translate-y-[6px] rotate-45 bg-gray-900"
+                    : "bg-white"
+                }`}
+              ></span>
+              <span
+                className={`w-5 h-[2px] mb-1 transition-all duration-300 ${
+                  menuOpen ? "opacity-0" : "bg-white"
+                }`}
+              ></span>
+              <span
+                className={`w-5 h-[2px] transition-all duration-300 ${
+                  menuOpen
+                    ? "-translate-y-[6px] -rotate-45 bg-gray-900"
+                    : "bg-white"
+                }`}
+              ></span>
+            </button>
+          </div>
+        </header>
+        {/* 🔹 Animated Right-Side Navigation Menu */}
+        <motion.nav
+          // use numeric x for better COMPOSITE-only animation (GPU)
+          initial={{ x: 100, opacity: 0 }}
+          animate={menuOpen ? { x: 0, opacity: 1 } : { x: 100, opacity: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          // force a new composite layer and hint the browser to optimize
+          style={{
+            transform: "translateZ(0)",
+            willChange: "transform, opacity",
+          }}
+          className={`fixed top-0 right-0 h-full w-full md:w-[380px]
   ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}
   z-[90] flex flex-col items-center justify-center space-y-8
   transition-all duration-300 ease-in-out
@@ -191,41 +204,39 @@ const handleSmoothNav = (targetId) => {
   border-l border-blue-400/20 md:border-blue-400/25
   shadow-[0_0_25px_rgba(59,130,246,0.2)]
 `}
+        >
+          {/* links */}
+          {[
+            { name: "Home", link: "#home" },
+            { name: "About", link: "#about" },
+            { name: "Skills", link: "#skills" },
+            { name: "Experience", link: "#experience" },
+            { name: "Projects", link: "#projects" },
+            { name: "Contact", link: "#contact" },
+          ].map((item, i) => (
+            <motion.a
+              key={item.name}
+              onClick={() => {
+                setMenuOpen(false);
+                handleSmoothNav(item.link);
+              }}
+              whileHover={{
+                scale: 1.12,
+                textShadow: "0 0 12px rgba(96,165,250,0.8)",
+                color: "#60A5FA",
+              }}
+              className="text-white text-xl md:text-lg font-semibold tracking-wide hover:text-blue-400 transition-all duration-300 cursor-pointer"
+            >
+              {item.name}
+            </motion.a>
+          ))}
 
->
-  {/* links */}
-  {[
-    { name: "Home", link: "#home" },
-    { name: "About", link: "#about" },
-    { name: "Skills", link: "#skills" },
-    { name: "Experience", link: "#experience" },
-    { name: "Projects", link: "#projects" },
-    { name: "Contact", link: "#contact" },
-  ].map((item, i) => (
-    <motion.a
-  key={item.name}
-  onClick={() => {
-    setMenuOpen(false);
-    handleSmoothNav(item.link);
-  }}
-  whileHover={{
-    scale: 1.12,
-    textShadow: "0 0 12px rgba(96,165,250,0.8)",
-    color: "#60A5FA",
-  }}
-  className="text-white text-xl md:text-lg font-semibold tracking-wide hover:text-blue-400 transition-all duration-300 cursor-pointer"
->
-  {item.name}
-</motion.a>
+          {/* right edge thin line only on desktop (cheap element) */}
+          <div className="hidden md:block absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-blue-400/40 via-blue-500/30 to-transparent opacity-60"></div>
 
-  ))}
-
-  {/* right edge thin line only on desktop (cheap element) */}
-  <div className="hidden md:block absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-blue-400/40 via-blue-500/30 to-transparent opacity-60"></div>
-
-  {/* mobile soft glow, cheap: just a translucent bg element (no blur) */}
-  <div className="md:hidden absolute inset-0 bg-blue-500/8 -z-10"></div>
-</motion.nav>
+          {/* mobile soft glow, cheap: just a translucent bg element (no blur) */}
+          <div className="md:hidden absolute inset-0 bg-blue-500/8 -z-10"></div>
+        </motion.nav>
 
         {/* 🔹 Hero Section */}
         <section
@@ -247,15 +258,15 @@ const handleSmoothNav = (targetId) => {
               Hi, I’m <span className="text-blue-400">Rushi</span> 👋
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-md mx-auto md:mx-0 sm:mt-2">
-              A passionate Web Developer who loves building clean, interactive,
-              and responsive web experiences.
+              I build interactive, scalable web products with a strong focus on
+              performance, usability, and real-world impact.
             </p>
             <div className="flex justify-center md:justify-start">
               <button
                 onClick={playClick}
                 className="mt-5 sm:mt-6 bg-blue-500 hover:bg-blue-600 active:scale-95 transition px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl font-semibold shadow-md text-base sm:text-lg"
               >
-                View My Work
+                <a href="#projects"> View My Work</a>
               </button>
             </div>
           </div>
@@ -319,16 +330,19 @@ const handleSmoothNav = (targetId) => {
                 </h2>
 
                 <h3 className="text-base sm:text-lg font-semibold text-blue-300 mb-4">
-                  Full Stack Developer | MERN Developer
+                  MERN Stack Developer | Full Stack Developer
                 </h3>
 
                 <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6">
-                  I am a Full-Stack Developer based in Mumbai, India, pursuing
-                  my <span className="">Information Technology</span> degree
-                  from Mumbai University. I love learning and building modern
-                  web applications. I specialize in the{" "}
-                  <span className="">MERN stack</span>, creating interactive and
-                  responsive web apps.
+                  MERN Stack / Full Stack Developer with hands-on experience of
+                  building scalable, secure, and high-performance web
+                  applications. Strong in responsive UI development, RESTful API
+                  design, authentication, and backend optimization using modern
+                  JavaScript technologies.
+                  <br />
+                  <br />
+                  Focused on clean code, performance, and delivering real-world,
+                  user-centric products across the full development lifecycle.
                 </p>
 
                 <div className="space-y-2 text-gray-300 mb-5">
@@ -364,7 +378,7 @@ const handleSmoothNav = (targetId) => {
           </div>
         </section>
 
-        {/* 🔹 Interactive Skills Section */}
+        {/* 🔹 Skills Section */}
         <section
           id="skills"
           className="flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 py-20 bg-transparent
@@ -385,7 +399,7 @@ const handleSmoothNav = (targetId) => {
           {/* Skills Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 max-w-5xl">
             {[
-              // 🌐 Frontend
+              // 🌐 Front-End
               {
                 name: "HTML5",
                 icon: "fab fa-html5",
@@ -411,6 +425,18 @@ const handleSmoothNav = (targetId) => {
                 percent: 88,
               },
               {
+                name: "Next.js",
+                icon: "fas fa-layer-group",
+                color: "#ffffff",
+                percent: 85,
+              },
+              {
+                name: "TypeScript",
+                icon: "fas fa-code",
+                color: "#3178C6",
+                percent: 82,
+              },
+              {
                 name: "React Native",
                 icon: "fab fa-react",
                 color: "#00D8FF",
@@ -428,9 +454,8 @@ const handleSmoothNav = (targetId) => {
                 color: "#7952B3",
                 percent: 85,
               },
-              // { name: "jQuery", icon: "fas fa-code", color: "#0769AD", percent: 75 },
 
-              // ⚙️ Backend
+              // ⚙️ Back-End
               {
                 name: "Node.js",
                 icon: "fab fa-node-js",
@@ -443,7 +468,18 @@ const handleSmoothNav = (targetId) => {
                 color: "#808080",
                 percent: 82,
               },
-              // { name: "PHP", icon: "fab fa-php", color: "#777BB4", percent: 70 },
+              {
+                name: "Authentication",
+                icon: "fas fa-user-shield",
+                color: "#22C55E",
+                percent: 85,
+              },
+              {
+                name: "REST APIs",
+                icon: "fas fa-plug",
+                color: "#EAB308",
+                percent: 85,
+              },
 
               // 🗄️ Databases
               {
@@ -458,14 +494,14 @@ const handleSmoothNav = (targetId) => {
                 color: "#00618A",
                 percent: 78,
               },
-
-              // 🔗 APIs & Tools
               {
-                name: "REST API",
-                icon: "fas fa-plug",
-                color: "#EAB308",
-                percent: 85,
+                name: "PostgreSQL",
+                icon: "fas fa-database",
+                color: "#336791",
+                percent: 75,
               },
+
+              // 🛠️ Tools & Deployment
               {
                 name: "Git & GitHub",
                 icon: "fab fa-github",
@@ -476,6 +512,18 @@ const handleSmoothNav = (targetId) => {
                 name: "Postman",
                 icon: "fas fa-paper-plane",
                 color: "#FF6C37",
+                percent: 80,
+              },
+              {
+                name: "Vercel",
+                icon: "fas fa-cloud-upload-alt",
+                color: "#ffffff",
+                percent: 85,
+              },
+              {
+                name: "Render",
+                icon: "fas fa-cloud",
+                color: "#46E3B7",
                 percent: 80,
               },
             ].map((skill, index) => (
@@ -570,7 +618,7 @@ const handleSmoothNav = (targetId) => {
           )}
         </section>
 
-        {/* 🔹 Experience Section - Visible Glowing Timeline Behind Content */}
+        {/* 🔹 Experience Section */}
         <section
           id="experience"
           className="relative flex flex-col items-center justify-center px-6 sm:px-10 md:px-20 py-24 bg-transparent
@@ -628,7 +676,7 @@ const handleSmoothNav = (targetId) => {
                   title: "Full Stack Developer",
                   company: "Pacecon Technosys",
                   location: "Dadar, Mumbai",
-                  duration: "Jun 2023 - Present",
+                  duration: "May 2024 - Present",
                   desc: "Creating scalable full-stack apps with MERN stack. Building APIs, managing databases, and developing dashboards with smooth UI/UX.",
                 },
               ].map((exp, index) => (
@@ -693,52 +741,208 @@ const handleSmoothNav = (targetId) => {
           className="flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 py-20 bg-transparent text-white overflow-hidden"
         >
           {/* Title */}
-          <div className="w-full flex flex-col items-center mb-14 sm:mb-16 text-center">
+          <div className="w-full flex flex-col items-center mb-12 text-center">
             <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 tracking-tight">
               <span className="text-blue-400">My</span> Projects
             </h1>
             <div className="h-[3px] w-20 bg-blue-500 rounded-full"></div>
             <p className="text-gray-400 mt-4 text-sm sm:text-base max-w-2xl leading-relaxed px-3">
-              Some of the projects I’ve built — blending creativity,
-              functionality, and performance.
+              Real-world applications built with a focus on scalability,
+              performance, and real user impact.
             </p>
+          </div>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {["company", "mobile", "personal"].map((type) => (
+              <button
+                key={type}
+                onClick={() => setActiveProjectType(type)}
+                className={`px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 border
+          ${
+            activeProjectType === type
+              ? "bg-blue-500 text-white border-blue-500"
+              : "bg-white/10 text-gray-300 border-white/10 hover:bg-white/20"
+          }`}
+              >
+                {type === "company" && "Company Web Applications"}
+                {type === "mobile" && "Company Mobile Applications"}
+                {type === "personal" && "Personal Projects"}
+              </button>
+            ))}
           </div>
 
           {/* Project Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl">
             {[
+              // 🏢 Company Web Applications
               {
-                title: "Portfolio Website",
-                desc: "A modern and responsive personal portfolio built with React and Tailwind CSS.",
-                tech: ["React", "TailwindCSS", "Framer Motion"],
-                link: "https://yourportfolio.com",
+                category: "company",
+                title: "Sugee Group – Inventory Management System",
+                desc: "Enterprise-grade inventory management system built for internal business operations.",
+                tech: [
+                  "React.js",
+                  "TypeScript",
+                  "TailwindCSS",
+                  "Node.js",
+                  "Express.js",
+                  "MySQL",
+                ],
+                caseStudy: {
+                  problem:
+                    "Inventory was managed manually across departments, leading to data inconsistency, stock mismatch, and delayed reporting.",
+                  role: "Designed and developed the complete full-stack system including frontend UI, backend APIs, authentication, and database architecture.",
+                  solution:
+                    "Built a role-based inventory platform with real-time stock updates, audit logs, workflow automation, and secure REST APIs.",
+                  impact:
+                    "Improved inventory accuracy, reduced operational errors, and streamlined internal workflows across teams.",
+                },
               },
               {
-                title: "E-Commerce Platform",
-                desc: "Full-stack shopping platform with payment integration and admin dashboard.",
-                tech: ["MongoDB", "Express", "React", "Node.js"],
-                link: "https://ecommerce-demo.com",
+                category: "company",
+                title: "Kalyan Vaidic Clock – Web Application",
+                desc: "A traditional Vaidic time-based web application displaying Panchang calculations.",
+                tech: [
+                  "React.js",
+                  "TailwindCSS",
+                  "Node.js",
+                  "Express.js",
+                  "MySQL",
+                ],
+                caseStudy: {
+                  problem:
+                    "Users required accurate Vaidic time calculations that were difficult to access digitally in a modern interface.",
+                  role: "Developed the frontend UI and backend logic for calculating and displaying traditional Vaidic time units.",
+                  solution:
+                    "Implemented a clean, responsive UI with precise Panchang calculations powered by backend APIs.",
+                  impact:
+                    "Enabled users to access traditional time data digitally with accuracy and ease.",
+                },
               },
               {
-                title: "Weather App",
-                desc: "Weather forecast web app using OpenWeather API and geolocation detection.",
-                tech: ["JavaScript", "API", "CSS3"],
-                link: "https://weatherapp-demo.com",
+                category: "company",
+                title: "Strike A Light – Reaction Time Gaming System",
+                desc: "Reaction-based gaming and ticketing system to measure user response time in real-time.",
+                tech: [
+                  "React.js",
+                  "TailwindCSS",
+                  "Chart.js",
+                  "Node.js",
+                  "Express.js",
+                  "MySQL",
+                ],
+                caseStudy: {
+                  problem:
+                    "The system required precise reaction-time measurement with real-time visual feedback and analytics.",
+                  role: "Handled frontend interaction logic, backend APIs, and performance visualization dashboards.",
+                  solution:
+                    "Built a real-time reaction tracking system with analytics charts and secure backend data handling.",
+                  impact:
+                    "Delivered a reliable and engaging gaming system used in live reaction-based environments.",
+                },
               },
-            ].map((proj, index) => (
-              <motion.div
-                key={proj.title}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                className="relative bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-6 sm:p-8 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-500 group flex flex-col justify-between"
-              >
-                <div>
+
+              // 📱 Mobile Applications
+              {
+                category: "mobile",
+                title: "Traxit – Medical Application",
+                desc: "Mobile healthcare application for managing medical workflows and patient-related data.",
+                tech: ["React Native", "Node.js", "Express.js", "MySQL"],
+                caseStudy: {
+                  problem:
+                    "Medical workflows were fragmented, making it difficult to track patient-related data efficiently.",
+                  role: "Developed mobile UI screens and integrated backend APIs for data management and reporting.",
+                  solution:
+                    "Created a mobile-first application with secure APIs to manage and visualize healthcare data.",
+                  impact:
+                    "Improved data accessibility and streamlined medical workflow management.",
+                },
+              },
+              {
+                category: "mobile",
+                title: "Kalyan Vaidic Clock – Mobile App",
+                desc: "Mobile version of the Vaidic Clock providing traditional time calculations.",
+                tech: ["React Native", "Node.js", "Express.js", "MySQL"],
+                caseStudy: {
+                  problem:
+                    "Users wanted access to Vaidic time calculations on mobile devices with offline-friendly usability.",
+                  role: "Developed the mobile application UI and integrated backend services.",
+                  solution:
+                    "Built a lightweight, intuitive mobile app optimized for performance and usability.",
+                  impact:
+                    "Expanded accessibility of traditional Vaidic time calculations to mobile users.",
+                },
+              },
+
+              // 👨‍💻 Personal Projects
+              {
+                category: "personal",
+                title: "BookMyShow Clone",
+                desc: "Full-stack movie ticket booking platform with authentication and booking flows.",
+                tech: ["React.js", "Node.js", "Express.js", "MongoDB", "Redis"],
+                caseStudy: {
+                  problem:
+                    "Understanding and implementing complex booking workflows similar to real-world platforms.",
+                  role: "Built the complete system including authentication, booking logic, admin controls, and APIs.",
+                  solution:
+                    "Implemented seat selection, booking management, role-based access, and optimized API handling.",
+                  impact:
+                    "Strengthened full-stack architecture knowledge and real-world system design skills.",
+                },
+              },
+              {
+                category: "personal",
+                title: "Instagram Clone (SocialGram)",
+                desc: "Social media platform featuring posts, likes, comments, and user authentication.",
+                tech: ["React.js", "Node.js", "Express.js", "MySQL"],
+                caseStudy: {
+                  problem:
+                    "Building scalable social features such as feeds, interactions, and authentication.",
+                  role: "Designed frontend UI and backend APIs for user interactions and data handling.",
+                  solution:
+                    "Developed core social features with secure authentication and optimized database queries.",
+                  impact:
+                    "Gained hands-on experience building scalable social media features.",
+                },
+              },
+              {
+                category: "personal",
+                title: "Job Portal Application",
+                desc: "Recruitment platform with job listings, authentication, and resume management.",
+                tech: [
+                  "React.js",
+                  "Node.js",
+                  "Express.js",
+                  "MongoDB",
+                  "Tailwind CSS",
+                ],
+                caseStudy: {
+                  problem:
+                    "Job seekers and recruiters needed a simple, efficient hiring platform.",
+                  role: "Developed frontend interfaces and backend APIs including authentication and admin panel.",
+                  solution:
+                    "Built job listings, role-based access, resume uploads, and PDF generation.",
+                  impact:
+                    "Demonstrated ability to design complete, production-style platforms end-to-end.",
+                },
+              },
+            ]
+              .filter((proj) => proj.category === activeProjectType)
+              .map((proj, index) => (
+                <motion.div
+                  key={proj.title}
+                  onClick={() => setSelectedProject(proj)}
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="cursor-pointer relative bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-6 sm:p-8 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-500"
+                >
                   <h3 className="text-xl sm:text-2xl font-bold text-blue-400 mb-2">
                     {proj.title}
                   </h3>
-                  <p className="text-gray-300 text-sm sm:text-base mb-4 leading-relaxed">
+                  <p className="text-gray-300 text-sm sm:text-base mb-4">
                     {proj.desc}
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -751,74 +955,160 @@ const handleSmoothNav = (targetId) => {
                       </span>
                     ))}
                   </div>
-                </div>
-                <a
-                  href={proj.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-block text-blue-400 hover:text-blue-300 font-medium text-sm sm:text-base"
-                >
-                  View Project{" "}
-                  <i className="fas fa-external-link-alt ml-2 text-xs"></i>
-                </a>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
           </div>
+
+          {/* 🔥 Case Study Overlay */}
+          {selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-lg flex items-center justify-center px-6"
+              onClick={() => setSelectedProject(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, y: 40 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 120, damping: 15 }}
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-3xl w-full bg-gradient-to-br from-gray-900 via-gray-850 to-gray-900 border border-blue-500/20 rounded-2xl p-8 sm:p-10 shadow-[0_0_40px_rgba(59,130,246,0.35)]"
+              >
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-4 right-4 text-gray-400 hover:text-blue-400 transition"
+                >
+                  <i className="fas fa-times text-xl"></i>
+                </button>
+
+                <h2 className="text-2xl sm:text-3xl font-bold text-blue-400 mb-6">
+                  {selectedProject.title}
+                </h2>
+
+                <div className="space-y-5 text-gray-300 text-sm sm:text-base leading-relaxed">
+                  <p>
+                    <span className="text-blue-300 font-semibold">
+                      Problem:
+                    </span>{" "}
+                    {selectedProject.caseStudy.problem}
+                  </p>
+                  <p>
+                    <span className="text-blue-300 font-semibold">
+                      My Role:
+                    </span>{" "}
+                    {selectedProject.caseStudy.role}
+                  </p>
+                  <p>
+                    <span className="text-blue-300 font-semibold">
+                      Solution:
+                    </span>{" "}
+                    {selectedProject.caseStudy.solution}
+                  </p>
+                  <p>
+                    <span className="text-blue-300 font-semibold">Impact:</span>{" "}
+                    {selectedProject.caseStudy.impact}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
         </section>
 
         {/* 🔹 Contact Section */}
         <section
           id="contact"
-          className="flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 py-20 bg-transparent
- text-white overflow-hidden"
+          className="relative flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 py-24 bg-transparent text-white overflow-hidden"
         >
+          {/* Soft Background Glow */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute w-[400px] h-[400px] bg-blue-500/20 blur-[180px] rounded-full top-10 left-10 animate-pulse"></div>
+            <div className="absolute w-[350px] h-[350px] bg-purple-500/20 blur-[160px] rounded-full bottom-10 right-10 animate-pulse"></div>
+          </div>
+
           {/* Title */}
-          <div className="w-full flex flex-col items-center mb-12 text-center">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
+          <div className="w-full flex flex-col items-center mb-14 text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight"
+            >
               <span className="text-blue-400">Get</span> In Touch
-            </h1>
+            </motion.h1>
             <div className="h-[3px] w-20 bg-blue-500 rounded-full"></div>
             <p className="text-gray-400 mt-4 text-sm sm:text-base max-w-xl leading-relaxed">
-              I’m always open to discussing new projects, ideas, or
-              opportunities.
+              Let’s talk about projects, opportunities, or anything
+              tech-related.
             </p>
           </div>
 
-          {/* Contact Form */}
-          <motion.form
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-6 sm:p-8 md:p-10 w-full max-w-lg text-center md:text-left"
-          >
-            <div className="flex flex-col space-y-5">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400"
+          {/* Content */}
+          <div className="flex flex-col md:flex-row gap-10 w-full max-w-5xl">
+            {/* Left Side – Only Lottie Animation */}
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true }}
+              className="flex-1 flex items-center justify-center"
+            >
+              <Lottie
+                animationData={contactAnimation}
+                loop
+                className="w-[90vw] sm:w-[420px] md:w-[520px] lg:w-[580px] max-w-[620px]"
               />
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400"
-              />
-              <textarea
-                rows="4"
-                placeholder="Your Message"
-                className="bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400 resize-none"
-              ></textarea>
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all duration-300"
-              >
-                Send Message
-              </button>
-            </div>
-          </motion.form>
+            </motion.div>
+
+            {/* Right Side – Contact Form */}
+            <motion.form
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="flex-1 bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-lg p-6 sm:p-8 md:p-10"
+            >
+              <div className="flex flex-col space-y-5">
+                <div className="relative">
+                  <i className="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-12 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+
+                <div className="relative">
+                  <i className="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-12 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+
+                <div className="relative">
+                  <i className="fas fa-comment-dots absolute left-4 top-4 text-gray-400"></i>
+                  <textarea
+                    rows="4"
+                    placeholder="Your Message"
+                    className="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-12 py-3 text-sm sm:text-base focus:outline-none focus:border-blue-400 resize-none"
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] transition-all duration-300 active:scale-95"
+                >
+                  Send Message
+                </button>
+              </div>
+            </motion.form>
+          </div>
         </section>
 
-        {/* 🔹 Epic Futuristic Footer Section */}
+        {/* 🔹 Footer Section */}
         <footer
           className="relative overflow-hidden bg-transparent
  text-gray-300 py-14 px-6 sm:px-10 md:px-20 text-center border-t border-blue-900/30"
@@ -837,18 +1127,18 @@ const handleSmoothNav = (targetId) => {
             {[
               {
                 icon: "fab fa-github",
-                link: "https://github.com/",
+                link: "https://github.com/rushiiiiiiiiiiiiiiiiiiii",
                 color: "#ffffff",
               },
               {
                 icon: "fab fa-linkedin",
-                link: "https://linkedin.com/",
+                link: "https://www.linkedin.com/in/rushikesh-arote/",
                 color: "#0A66C2",
               },
               {
-                icon: "fab fa-twitter",
-                link: "https://twitter.com/",
-                color: "#1DA1F2",
+                icon: "fab fa-whatsapp",
+                link: "https://wa.me/919324004785?text=Hi%20Rushi%2C%20I%20checked%20your%20portfolio%20and%20would%20like%20to%20connect.",
+                color: "#25D366",
               },
               {
                 icon: "fas fa-envelope",
@@ -894,7 +1184,7 @@ const handleSmoothNav = (targetId) => {
             <span className="text-blue-400 font-semibold">Rushi.dev</span> —
             Designed & Built with 💙 by{" "}
             <span className="text-white font-medium hover:text-blue-400 transition-all duration-300 cursor-pointer">
-              Rushi Arote
+              Rushikesh Arote
             </span>
           </p>
 
